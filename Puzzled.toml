@@ -1,0 +1,17 @@
+mode = "release"
+
+[log]
+ansi = true
+level = "trace"
+target = true
+
+[scope]
+# context = "/usr/local/pzzld/src/FL03/pzzld-server/.artifacts"
+workdir = "dist"
+
+[server]
+name = "pzzld"
+
+[[server.address]]
+host = "0.0.0.0"
+port = 80

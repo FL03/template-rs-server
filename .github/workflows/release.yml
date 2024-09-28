@@ -1,0 +1,34 @@
+name: release
+
+concurrency:
+  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+  CARGO_TERM_COLOR: always
+
+on:
+  release:
+    types: [ published ]
+  repository_dispatch:
+    types: [ crates-io ]
+  workflow_dispatch:
+
+permissions: write-all
+
+jobs:
+  crates-io:
+    env:
+      PACKAGE: ${{ github.event.repository.name }}
+    name: crates-io
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: checkout
+        uses: actions/checkout@v4
+      
+      - 
+        if: github.event_name == 'release' && github.event.action == 'published'
+        name: publish 
+        run: cargo publish --all-features -v -p ${{ env.PACKAGE }}
